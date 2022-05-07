@@ -1,4 +1,4 @@
-import Form from '../../components/management/signinForm'
+import Form from '../../components/management/signupForm'
 
 export default function Login(){
     return(

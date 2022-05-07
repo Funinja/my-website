@@ -9,15 +9,35 @@ import { Text,
     Spacer
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 export default function Form() {
-    console.log("In form");
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const handleSubmit = event => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
         alert(`Email: ${email} & Password: ${password}`);
+
+        if(!email || !email.includes('@') || !password){
+            alert('Invalid details');
+            return;
+        }
+
+        const res = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email:email,
+                password:password,
+            }),
+        })
+
+        const data = await res.json();
+        console.log(data);
+
     }
     return(
         <form onSubmit={handleSubmit} width="800px">
@@ -45,7 +65,7 @@ export default function Form() {
             </FormControl>
             <Flex flexDir="row">
                 <Spacer />
-                <Button my={4} colorScheme="teal" type="submit" variant="outline"> Login </Button>
+                <Button my={4} colorScheme="teal" type="submit" variant="outline"> Sign Up </Button>
             </Flex>
         </form>
     );

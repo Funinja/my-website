@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import { ChakraProvider, extendTheme } from "@chakra-ui/react"
+import { SessionProvider } from "next-auth/react"
 
 function MyApp({ Component, pageProps }) {
   const config = {
@@ -9,9 +10,11 @@ function MyApp({ Component, pageProps }) {
 
   const theme = extendTheme({ config });
   return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <SessionProvider>
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </SessionProvider>
   );
 }
 

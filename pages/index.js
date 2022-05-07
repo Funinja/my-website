@@ -11,9 +11,9 @@ export default function Home() {
         <Text fontSize="2xl" my={4}>
           Software  Student
         </Text>
-        <Button colorScheme="cyan" size="lg">
+        {/* <Button colorScheme="cyan" size="lg">
           Hire
-        </Button>
+        </Button> */}
       </Container>
     </>
   );

@@ -11,7 +11,6 @@ import { Text,
 import React, { useState } from 'react';
 
 export default function Form() {
-    console.log("In form");
     const [password1, setPassword1] = useState('');
     const [password, setPassword] = useState('');
     const handleSubmit = event => {
