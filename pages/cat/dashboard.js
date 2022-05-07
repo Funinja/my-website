@@ -1,5 +1,5 @@
 import Container from "../../components/management/Container";
-import { Heading, Text, Button } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 
 
 export default function Dashboard() {

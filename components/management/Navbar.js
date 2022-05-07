@@ -14,6 +14,7 @@ const Navbar = () => {
       <Flex
         flexDirection="row"
         justifyContent="space-between"
+        borderRadius='lg'
         maxWidth="800px"
         minWidth="356px"
         width="100%"
@@ -27,7 +28,7 @@ const Navbar = () => {
         color="white"
       >
         <Box>
-          <NextLink href="/" passHref>
+          <NextLink href="/cat/dashboard" passHref>
             <Button
               as="a"
               variant="ghost"
@@ -40,19 +41,31 @@ const Navbar = () => {
           </NextLink>
         </Box>
         <Flex flexDir="row">
+          <NextLink href="/cat/signup" passHref>
+            <Button
+              as="a"
+              variant="ghost"
+              _hover={{ backgroundColor: navHoverBg[colorMode] }}
+            >
+              Sign In
+            </Button>
+          </NextLink>
+          <NextLink href="/cat/change_password" passHref>
+            <Button
+              as="a"
+              variant="ghost"
+              _hover={{ backgroundColor: navHoverBg[colorMode] }}
+            >
+              Change Password
+            </Button>
+            </NextLink>
           <Button
             as="a"
-            variant="ghost"
+            variant="outline"
+            colorScheme='teal'
             _hover={{ backgroundColor: navHoverBg[colorMode] }}
           >
-            Sign In
-          </Button>
-          <Button
-            as="a"
-            variant="ghost"
-            _hover={{ backgroundColor: navHoverBg[colorMode] }}
-          >
-            Register
+            Logout
           </Button>
         </Flex>
       </Flex>

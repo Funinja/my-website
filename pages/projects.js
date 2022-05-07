@@ -21,7 +21,7 @@ export default function Projects(){
               borderRadius={5}
             >
               <Text fontWeight="bold" fontSize="2xl">
-                Time Management Site
+                Cat Management
               </Text>
               <Text fontSize="2xl">
                 (Chakra, Javascript, MongoDB, Next-Auth, Cryptography )
