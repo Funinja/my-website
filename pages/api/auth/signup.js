@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import { hash } from 'bcryptjs';
+
 
 async function handler(req, res) {
 
@@ -20,7 +20,7 @@ async function handler(req, res) {
 
         const status = await db.collection('users').insertOne({
             email,
-            password: await hash(password, 12),
+            password: password,
         });
 
         res.status(201).json({ message: 'User created', ...status});

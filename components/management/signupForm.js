@@ -10,6 +10,7 @@ import { Text,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { hash } from 'bcryptjs';
 
 export default function Form() {
     const [email, setEmail] = useState('');
@@ -31,7 +32,7 @@ export default function Form() {
             },
             body: JSON.stringify({
                 email:email,
-                password:password,
+                password: await hash(password, 12),
             }),
         })
 
