@@ -47,7 +47,7 @@ const Navbar = () => {
               variant="ghost"
               _hover={{ backgroundColor: navHoverBg[colorMode] }}
             >
-              Sign Up
+              Login
             </Button>
           </NextLink>
           <NextLink href="/cat/change_password" passHref>

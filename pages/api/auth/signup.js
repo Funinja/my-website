@@ -6,8 +6,8 @@ async function handler(req, res) {
     if(req.method === 'POST'){
         const { email, password } = req.body;
 
-        if(!email || !email.includes('@') || !password) {
-            res.status(422).json({message: 'Invalid Data'});
+        if(!email || !email.includes('@')) {
+            res.status(422).json({message: 'Invalid Email'});
             return;
         }
 
@@ -18,9 +18,18 @@ async function handler(req, res) {
 
         const db = client.db();
 
+        const duplicate = await db.collection('users').findOne({email:email});
+        console.log(duplicate);
+        
+        if(duplicate){
+            console.log(duplicate);
+            res.status(422).json({ message: 'User Already Created'});
+            client.close();
+            return;
+        }
+
         const status = await db.collection('users').insertOne({
             email,
-            password: password,
         });
 
         res.status(201).json({ message: 'User created', ...status});
