@@ -26,44 +26,13 @@ export default function Register() {
 
     const isError = error === '';
 
-    const recaptchaRef = React.useRef(null);
+    const recaptchaRef = React.useRef();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        await recaptchaRef.current.execute();
+        await recaptchaRef.current.executeAsync();
 
-        // console.log("");
-
-        // // alert('Registering New Account');
-        // if(!email || !email.includes('@')){
-        //     alert('Invalid details');
-        //     return;
-        // }
-
-        // const res = await fetch('/api/auth/signup', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type' : 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         email:email,
-        //         token: token
-        //     }),
-        // })
-
-        // const data = await res.json();
-
-        // console.log(res.status);
-
-        // if(res.status < 200 || res.status > 299){
-        //     // console.log(data.message);
-        //     setError(data.message);
-        //     console.log(error);
-        //     return;
-        // }
-
-        // console.log(data);
     }
 
     const onReCAPTCHAChange = async (captchaCode) => {
@@ -107,9 +76,9 @@ export default function Register() {
             console.log(data);
         }catch(error){
             alert(error?.message || "Something went wrong")
+        }finally{
+            recaptchaRef.current.reset();
         }
-
-        recaptchaRef.current.reset();
     }
 
     const PUBLIC_SITEKEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY;
