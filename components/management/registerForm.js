@@ -8,53 +8,121 @@ import { Text,
     Flex,
     Spacer
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { hash } from 'bcryptjs';
 import NextLink from "next/link";
+import Proptypes from "prop-types";
+import ReCAPTCHA from "react-google-recaptcha";
+
 
 export default function Register() {
+
     const [email, setEmail] = useState('');
 
     const [error, setError] = useState('');
 
+    const [token, setToken] = useState('');
+
     const isError = error === '';
+
+    const recaptchaRef = React.useRef(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // alert('Registering New Account');
+
+        await recaptchaRef.current.execute();
+
+        // console.log("");
+
+        // // alert('Registering New Account');
+        // if(!email || !email.includes('@')){
+        //     alert('Invalid details');
+        //     return;
+        // }
+
+        // const res = await fetch('/api/auth/signup', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type' : 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         email:email,
+        //         token: token
+        //     }),
+        // })
+
+        // const data = await res.json();
+
+        // console.log(res.status);
+
+        // if(res.status < 200 || res.status > 299){
+        //     // console.log(data.message);
+        //     setError(data.message);
+        //     console.log(error);
+        //     return;
+        // }
+
+        // console.log(data);
+    }
+
+    const onReCAPTCHAChange = async (captchaCode) => {
+        if(!captchaCode){
+            return;
+        }
+
+        setToken(captchaCode);
+
+        alert(`Captcha working ${captchaCode}`);
+
         if(!email || !email.includes('@')){
             alert('Invalid details');
             return;
         }
 
-        const res = await fetch('/api/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify({
-                email:email,
-            }),
-        })
+        try{
+            console.log("awaiting signup api");
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({
+                    email:email,
+                    captcha: captchaCode
+                }),
+            });
 
-        const data = await res.json();
+            const data = await response.json();
 
-        console.log(res.status);
+            console.log(response.status);
 
-        if(res.status < 200 || res.status > 299){
-            // console.log(data.message);
-            setError(data.message);
-            console.log(error);
-            return;
+            if(response.status < 200 || response.status > 299){
+                // console.log(data.message);
+                setError(data.message);
+                console.log(error);
+                return;
+            }
+
+            console.log(data);
+        }catch(error){
+            alert(error?.message || "Something went wrong")
         }
 
-        console.log(data);
+        recaptchaRef.current.reset();
     }
+
+    const PUBLIC_SITEKEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY;
 
     return(
         <>
             <form onSubmit={handleSubmit} width="800px">
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={PUBLIC_SITEKEY}
+                    onChange={onReCAPTCHAChange}
+                />
                 <FormControl isRequired width="800px">
                     <FormLabel> Email Address </FormLabel>
                     <Input 
@@ -69,11 +137,13 @@ export default function Register() {
 
 
                 </FormControl>
+
                 <Flex flexDir="row">
                     <Spacer />
                     <Button my={4} colorScheme="teal" type="submit" variant="outline"> Sign Up </Button>
                 </Flex>
             </form>
+
         </>
     )
 }
