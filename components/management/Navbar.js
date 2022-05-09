@@ -1,4 +1,4 @@
-import { Flex, Box, Button, useColorMode, Text } from '@chakra-ui/react'
+import { Flex, Box, Button, useColorMode, Link } from '@chakra-ui/react'
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 
@@ -41,15 +41,7 @@ const Navbar = () => {
           </NextLink>
         </Box>
         <Flex flexDir="row">
-          <NextLink href="/cat/signup" passHref>
-            <Button
-              as="a"
-              variant="ghost"
-              _hover={{ backgroundColor: navHoverBg[colorMode] }}
-            >
-              Login
-            </Button>
-          </NextLink>
+
           <NextLink href="/cat/change_password" passHref>
             <Button
               as="a"

@@ -51,7 +51,7 @@ export default function Register() {
 
         try{
             console.log("awaiting signup api");
-            const response = await fetch('/api/auth/signup', {
+            const response = await fetch('/api/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'
