@@ -1,5 +1,7 @@
 import { MongoClient } from 'mongodb';
 
+const mailjet = require('node-mailjet').connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
+
 const sleep = () => new Promise((resolve) => {
     setTimeout(()=>{
         resolve();
@@ -39,6 +41,32 @@ async function handler(req, res) {
                 console.log('Here3')
                 await sleep();
 
+                const mailing = mailjet
+                    .post("send", {'version':'v3.1'})
+                    .request({
+                        "Messages": [{
+                            "From":{
+                                "Email": "denwt.lam@outlook.com",
+                                "Name": "Dennis Lam"
+                            },
+                            "To":[{
+                                "Email": email,
+                                "Name":"Customer"
+                            }],
+                            "Subject": "This is an email",
+                            "TextPart":"This is the body of the email",
+                            "HTMLPart": "<p>This is the body of the email</p>"
+                        }]
+                    })
+
+                mailing
+                    .then((result) => {
+                        console.log(result.body)
+                    })
+                    .catch((err) => {
+                        console.log(err.statusCode)
+                    })
+
                 const client = await MongoClient.connect(
                     `${process.env.MONGO_URI}`,
                     { useNewUrlParser: true, useUnifiedTopology: true}
@@ -56,11 +84,11 @@ async function handler(req, res) {
                     return;
                 }
     
-                const status = await db.collection('users').insertOne({
-                    email,
-                });
+                // const status = await db.collection('users').insertOne({
+                //     email,
+                // });
     
-                res.status(201).json({ message: 'User created', ...status});
+                res.status(201).json({ message: 'Email Sent'});
                 client.close();
             }else{
                 return res.status(422).json({
