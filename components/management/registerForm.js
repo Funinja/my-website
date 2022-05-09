@@ -15,6 +15,8 @@ import NextLink from "next/link";
 import Proptypes from "prop-types";
 import ReCAPTCHA from "react-google-recaptcha";
 
+const bcrypt = require('bcryptjs');
+
 
 export default function Register() {
 
@@ -23,6 +25,8 @@ export default function Register() {
     const [error, setError] = useState('');
 
     const [token, setToken] = useState('');
+
+    const [password, setPassword] = useState('');
 
     const isError = error === '';
 
@@ -58,7 +62,8 @@ export default function Register() {
                 },
                 body: JSON.stringify({
                     email:email,
-                    captcha: captchaCode
+                    captcha: captchaCode,
+                    password: bcrypt.hashSync(password, 12),
                 }),
             });
 
@@ -104,6 +109,18 @@ export default function Register() {
 
                     <FormHelperText> You will get an email to make an account, check your spam folder </FormHelperText>
 
+
+                </FormControl>
+                <FormControl isRequired width="800px" my={2}>
+                    <FormLabel> Password </FormLabel>
+                    <Input 
+                        placeholder="********"
+                        type='password' 
+                        size='lg'
+                        onChange={event => setPassword(event.currentTarget.value)}
+                    />
+
+                    <FormHelperText> Make a password. I'm not liable for stolen passwords </FormHelperText>
 
                 </FormControl>
 

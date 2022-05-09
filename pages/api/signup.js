@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-
+const bcrypt = require('bcryptjs');
 const mailjet = require('node-mailjet').connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
 const sleep = () => new Promise((resolve) => {
@@ -11,11 +11,11 @@ const sleep = () => new Promise((resolve) => {
 async function handler(req, res) {
 
     if(req.method === 'POST'){
-        const { email, captcha } = req.body;
+        const { email, captcha, password } = req.body;
 
         console.log(captcha);
 
-        if(!email || !email.includes('@') || !captcha) {
+        if(!email || !password || !email.includes('@') || !captcha) {
             res.status(422).json({message: 'Invalid Email'});
             return;
         }
@@ -41,6 +41,106 @@ async function handler(req, res) {
                 console.log('Here3')
                 await sleep();
 
+                const client = await MongoClient.connect(
+                    `${process.env.MONGO_URI}`,
+                    { useNewUrlParser: true, useUnifiedTopology: true}
+                );
+    
+                const db = client.db();
+    
+                const duplicate = await db.collection('users').findOne({email:email});
+                console.log(duplicate);
+                
+                if(duplicate){
+                    console.log(duplicate.registered);
+                    if(duplicate.registered==0){
+
+                        let randomString  = (Math.random() + 1).toString(36).substring(2);
+
+                        var salt = bcrypt.genSaltSync(10);
+                        var hash = bcrypt.hashSync(randomString, salt);
+                        hash = hash.replace(new RegExp("/", 'g'), '');
+                        console.log("length", hash.length);
+
+                        console.log("Substring:", randomString, "Hash:", hash);
+
+                        const status = await db.collection('users').updateOne({
+                            email,
+                        }, {
+                            $set: {
+                                id:hash,
+                                password:password
+                            }
+                        });
+
+                        const encodedHash = encodeURI(hash);
+
+                        console.log(encodedHash);
+                        
+                        const URL = `${process.env.DOMAIN}api/activate/user/${encodedHash}`;
+
+                        const mailing = mailjet
+                            .post("send", {'version':'v3.1'})
+                            .request({
+                                "Messages": [{
+                                    "From":{
+                                        "Email": "denwt.lam@outlook.com",
+                                        "Name": "Dennis Lam"
+                                    },
+                                    "To":[{
+                                        "Email": email,
+                                        "Name":"Customer"
+                                    }],
+                                    "Subject": "Activate your account",
+                                    "TextPart":`Activation URL: ${URL}`,
+                                    "HTMLPart": `<p>Activation URL: <a href="${URL}">${URL}</a></p>`
+                                }]
+                            })
+
+                        mailing
+                            .then((result) => {
+                                console.log(result.body)
+                            })
+                            .catch((err) => {
+                                console.log(err.statusCode)
+                            })
+
+            
+                        res.status(201).json({ message: 'Email Sent'});
+                        client.close();
+                        return;
+
+                    }else{
+                        res.status(422).json({ message: 'User Already Created'});
+                        client.close();
+                        return;
+                    }
+                }
+
+                let randomString  = (Math.random() + 1).toString(36).substring(2);
+
+                var salt = bcrypt.genSaltSync(10);
+                var hash = bcrypt.hashSync(randomString, salt);
+
+                hash = hash.replace(new RegExp("/", 'g'), '');
+
+                console.log("length", hash.length);
+
+                console.log("Substring:", randomString, "Hash:", hash);
+
+                const status = await db.collection('users').insertOne({
+                    id : hash,
+                    registered: 0,
+                    email,
+                    password, 
+                });
+
+                const encodedHash = encodeURI(hash);
+
+                console.log(encodedHash);
+
+                const URL = `${process.env.DOMAIN}api/activate/user/${encodedHash}`;
+
                 const mailing = mailjet
                     .post("send", {'version':'v3.1'})
                     .request({
@@ -53,9 +153,9 @@ async function handler(req, res) {
                                 "Email": email,
                                 "Name":"Customer"
                             }],
-                            "Subject": "This is an email",
-                            "TextPart":"This is the body of the email",
-                            "HTMLPart": "<p>This is the body of the email</p>"
+                            "Subject": "Activate your account",
+                            "TextPart":`Activation URL: ${URL}`,
+                            "HTMLPart": `<p>Activation URL: <a href="${URL}">${URL}</a></p>`
                         }]
                     })
 
@@ -67,26 +167,6 @@ async function handler(req, res) {
                         console.log(err.statusCode)
                     })
 
-                const client = await MongoClient.connect(
-                    `${process.env.MONGO_URI}`,
-                    { useNewUrlParser: true, useUnifiedTopology: true}
-                );
-    
-                const db = client.db();
-    
-                const duplicate = await db.collection('users').findOne({email:email});
-                console.log(duplicate);
-                
-                if(duplicate){
-                    console.log(duplicate);
-                    res.status(422).json({ message: 'User Already Created'});
-                    client.close();
-                    return;
-                }
-    
-                // const status = await db.collection('users').insertOne({
-                //     email,
-                // });
     
                 res.status(201).json({ message: 'Email Sent'});
                 client.close();

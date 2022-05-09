@@ -14,6 +14,7 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "bcryptjs": "^2.4.3",
+    "crypto-js": "^4.1.1",
     "framer-motion": "^4",
     "mongodb": "^4.5.0",
     "next": "12.1.6",
