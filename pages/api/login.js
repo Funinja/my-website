@@ -1,4 +1,8 @@
 import { MongoClient } from 'mongodb';
+import { sign } from "jsonwebtoken";
+import { serialize } from "cookie";
+
+const secret = process.env.TOKEN_SECRET;
 
 const sleep = () => new Promise((resolve) => {
     setTimeout(()=>{
@@ -51,7 +55,25 @@ async function handler(req,res){
 
                 if (duplicate){
 
+                    console.log(secret);
 
+                    const token = sign({
+                        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30 days
+                        email: email
+                    },
+                    secret
+
+                    )
+
+                    const serialised = serialize("CatJWT", token, {
+                        httpOnly:true,
+                        secure: process.env.NODE_ENV !== "development",
+                        sameSite: "strict",
+                        maxAge: 60 * 60 * 24 * 30,
+                        path: "/"
+                    });
+
+                    res.setHeader("Set-Cookie", serialised);
 
                     res.status(201).json({ message: 'Login Successful'});
                     client.close();

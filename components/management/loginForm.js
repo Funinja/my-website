@@ -9,10 +9,9 @@ import { Text,
     Spacer
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { signIn } from 'next-auth/react';
-import { hash } from 'bcryptjs';
-import NextLink from "next/link";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useRouter } from 'next/router';
+
 const bcrypt = require('bcryptjs');
 var sha256 = require('js-sha256').sha256;
 
@@ -26,9 +25,6 @@ export default function Form() {
         event.preventDefault();
 
         await recaptchaRef.current.executeAsync();
-
-        alert(`Email: ${email} & Password: ${password}`);
-
     }
 
     const onReCAPTCHAChange = async (captchaCode) => {
@@ -70,6 +66,10 @@ export default function Form() {
             }
 
             console.log(data);
+
+            window.location.href = '/cat/dashboard';
+
+
         }catch(error){
             alert(error?.message || "Something went wrong")
         }finally{

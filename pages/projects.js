@@ -24,7 +24,7 @@ export default function Projects(){
                 Cat Management
               </Text>
               <Text fontSize="2xl">
-                (Chakra, Javascript, MongoDB, Next-Auth, Cryptography )
+                (Chakra, Javascript, MongoDB, Cryptography )
               </Text>
             </Flex>
           </Link>
