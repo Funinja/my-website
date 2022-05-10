@@ -43,7 +43,7 @@ export default function Register() {
 
         setToken(captchaCode);
 
-        alert(`Captcha working ${captchaCode}`);
+        // alert(`Captcha working ${captchaCode}`);
 
         if(!email || !email.includes('@') || !password){
             alert('Invalid details');

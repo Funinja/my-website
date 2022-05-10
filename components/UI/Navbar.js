@@ -71,6 +71,17 @@ const Navbar = () => {
           </NextLink>
         </Box>
         <Flex flexDir="row">
+          <NextLink href="/cat/dashboard/pomodoro" passHref>
+            <Button
+              as="a"
+              variant="ghost"
+              p={[1, 2, 2]}
+              _hover={{ backgroundColor: navHoverBg[colorMode] }}
+              aria-label="Pomodoro"
+            >
+              Pomodoro
+            </Button>
+          </NextLink>
 
           <Button
             as="a"

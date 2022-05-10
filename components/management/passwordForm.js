@@ -16,7 +16,7 @@ export default function Form() {
     const handleSubmit = event => {
         event.preventDefault();
 
-        alert(`Password: ${password1} & Password: ${password}`);
+        // alert(`Password: ${password1} & Password: ${password}`);
     }
     return(
         <form onSubmit={handleSubmit} width="800px">
