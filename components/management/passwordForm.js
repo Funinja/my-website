@@ -44,7 +44,7 @@ export default function Form() {
             </FormControl>
             <Flex flexDir="row">
                 <Spacer />
-                <Button my={4} colorScheme="teal" type="submit" variant="outline"> Login </Button>
+                <Button my={4} colorScheme="teal" type="submit" variant="outline"> Change </Button>
             </Flex>
         </form>
     );
