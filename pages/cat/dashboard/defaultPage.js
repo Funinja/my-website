@@ -9,7 +9,7 @@ export default function FrontPage(props){
     return (
         <Container>
           <Heading> Hello {props.name}!</Heading>
-          <Text fontSize='3xl'> Welcome to Cat Management!</Text>
+          <Text fontSize='3xl'> You can try the pomodoro timer!</Text>
         </Container>
     )
 }

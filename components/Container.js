@@ -9,15 +9,15 @@ export default function Container({ children }) {
         as="main"
         spacing={8}
         justifyContent="center"
-        alignItems="flex-start"
+        alignItems="center"
         m="0 auto 4rem auto"
         maxWidth="800px"
         px={4}
       >
         <Flex
           flexDirection="column"
-          justifyContent="flex-start"
-          alignItems="flex-start"
+          justifyContent="center"
+          alignItems="center"
           maxWidth="800px"
           w="100%"
         >

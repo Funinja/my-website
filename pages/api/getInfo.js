@@ -30,7 +30,7 @@ export default async function handler(req, res) {
 
         client.close();
 
-        return res.status(200).json({ name: decoded.email, other: duplicate });
+        return res.status(200).json({ name: decoded.email, other: null });
     }catch(error){
         console.log(error);
         return res.status(201).json({ name: 'Cheater', other: null });
