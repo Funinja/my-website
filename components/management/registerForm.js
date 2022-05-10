@@ -9,13 +9,10 @@ import { Text,
     Spacer
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { signIn } from 'next-auth/react';
-import { hash } from 'bcryptjs';
-import NextLink from "next/link";
-import Proptypes from "prop-types";
 import ReCAPTCHA from "react-google-recaptcha";
 
 const bcrypt = require('bcryptjs');
+var sha256 = require('js-sha256').sha256;
 
 
 export default function Register() {
@@ -48,7 +45,7 @@ export default function Register() {
 
         alert(`Captcha working ${captchaCode}`);
 
-        if(!email || !email.includes('@')){
+        if(!email || !email.includes('@') || !password){
             alert('Invalid details');
             return;
         }
@@ -63,9 +60,11 @@ export default function Register() {
                 body: JSON.stringify({
                     email:email,
                     captcha: captchaCode,
-                    password: bcrypt.hashSync(password, 12),
+                    password: sha256(password),
                 }),
             });
+
+            console.log(bcrypt.hash(password, 12));
 
             const data = await response.json();
 

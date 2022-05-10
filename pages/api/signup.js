@@ -38,7 +38,6 @@ async function handler(req, res) {
             console.log(captchaValidation);
 
             if(captchaValidation.success){
-                console.log('Here3')
                 await sleep();
 
                 const client = await MongoClient.connect(
@@ -76,7 +75,7 @@ async function handler(req, res) {
                         const encodedHash = encodeURI(hash);
 
                         console.log(encodedHash);
-                        
+
                         const URL = `${process.env.DOMAIN}api/activate/user/${encodedHash}`;
 
                         const mailing = mailjet

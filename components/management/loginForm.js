@@ -12,19 +12,83 @@ import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { hash } from 'bcryptjs';
 import NextLink from "next/link";
+import ReCAPTCHA from "react-google-recaptcha";
+const bcrypt = require('bcryptjs');
+var sha256 = require('js-sha256').sha256;
 
 export default function Form() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const recaptchaRef = React.useRef();
+    const [error, setError] = useState('');
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        await recaptchaRef.current.executeAsync();
 
         alert(`Email: ${email} & Password: ${password}`);
 
     }
+
+    const onReCAPTCHAChange = async (captchaCode) => {
+        if(!captchaCode){
+            return;
+        }
+
+
+        alert(`Captcha working ${captchaCode}`);
+
+        if(!email || !email.includes('@') || !password){
+            alert('Invalid details');
+            return;
+        }
+
+        try{
+            console.log("awaiting signup api");
+            const response = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({
+                    email:email,
+                    captcha: captchaCode,
+                    password: sha256(password),
+                }),
+            });
+
+            const data = await response.json();
+
+            console.log(response.status);
+
+            if(response.status < 200 || response.status > 299){
+                // console.log(data.message);
+                setError(data.message);
+                console.log(error);
+                return;
+            }
+
+            console.log(data);
+        }catch(error){
+            alert(error?.message || "Something went wrong")
+        }finally{
+            recaptchaRef.current.reset();
+        }
+    }
+
+    const PUBLIC_SITEKEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY;
+
+
     return(
         <>
             <form onSubmit={handleSubmit} width="800px">
+                <ReCAPTCHA
+                    ref={recaptchaRef}
+                    size="invisible"
+                    sitekey={PUBLIC_SITEKEY}
+                    onChange={onReCAPTCHAChange}
+                />
                 <FormControl isRequired width="800px">
                     <FormLabel> Email Address </FormLabel>
                     <Input 

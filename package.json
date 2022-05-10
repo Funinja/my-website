@@ -16,6 +16,7 @@
     "bcryptjs": "^2.4.3",
     "crypto-js": "^4.1.1",
     "framer-motion": "^4",
+    "js-sha256": "^0.9.0",
     "mongodb": "^4.5.0",
     "next": "12.1.6",
     "next-auth": "^4.3.4",

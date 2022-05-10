@@ -7,8 +7,11 @@ export default function Dashboard() {
         <div>
             <Container>
                 <Heading fontSize='5xl'> Welcome to Cat Management! </Heading>
+                <Link href="/cat/login">
+                    <Button mx={1} my={4} px={6} colorScheme="teal" type="submit" variant="outline"> Login </Button>
+                </Link>
                 <Link href="/cat/signup">
-                    <Button my={4} colorScheme="teal" type="submit" variant="outline"> Sign Up </Button>
+                    <Button mx={1} colorScheme="teal" type="submit" variant="solid"> Sign Up </Button>
                 </Link>
             </Container>
 
