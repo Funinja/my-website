@@ -67,7 +67,7 @@ export default function Form() {
 
             console.log(data);
 
-            window.location.href = '/cat/dashboard';
+            window.location.href = '/cat/dashboard/defaultPage';
 
 
         }catch(error){

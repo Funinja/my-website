@@ -58,7 +58,7 @@ const Navbar = () => {
         color="white"
       >
         <Box>
-          <NextLink href="/cat/dashboard" passHref>
+          <NextLink href="/cat/intro" passHref>
             <Button
               as="a"
               variant="ghost"
@@ -81,15 +81,6 @@ const Navbar = () => {
               Change Password
             </Button>
             </NextLink>
-          <Button
-            as="a"
-            variant="outline"
-            colorScheme='teal'
-            onClick={()=>handleLogout()}
-            _hover={{ backgroundColor: navHoverBg[colorMode] }}
-          >
-            Logout
-          </Button>
         </Flex>
       </Flex>
     );

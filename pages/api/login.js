@@ -38,7 +38,6 @@ async function handler(req,res){
 
             if(captchaValidation.success){
                 await sleep();
-                console.log("Here3");
                 const client = await MongoClient.connect(
                     `${process.env.MONGO_URI}`,
                     { useNewUrlParser: true, useUnifiedTopology: true}

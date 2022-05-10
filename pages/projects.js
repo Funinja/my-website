@@ -12,7 +12,7 @@ export default function Projects(){
       <Container>
         <Heading fontSize="6xl"> Projects </Heading>
         <Flex flexDir="column" w="800px">
-          <Link href="/cat/dashboard">
+          <Link href="/cat/intro">
             <Flex
               flexDir="column"
               my={4}
