@@ -1,8 +1,9 @@
-import { verify } from 'jsonwebtoken';
+import { verify, decode } from 'jsonwebtoken';
+import { MongoClient } from 'mongodb';
 
 const secret = process.env.TOKEN_SECRET;
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
 
     const { cookie } = req.body;
     const jwt = cookie;
@@ -14,9 +15,25 @@ export default function handler(req, res) {
     try{
         verify(jwt, secret);
 
-        return res.status(200).json({ name: 'Jane Smith' });
+        var decoded = decode(jwt);
+
+        const client = await MongoClient.connect(
+            `${process.env.MONGO_URI}`,
+            { useNewUrlParser: true, useUnifiedTopology: true}
+        );
+
+        const db = client.db();
+
+        const duplicate = await db.collection('users').findOne({
+            email: decoded.email,
+        });
+
+        client.close();
+
+        return res.status(200).json({ name: decoded.email, other: duplicate });
     }catch(error){
-        return res.status(201).json({ name: 'John Doe', error: error });
+        console.log(error);
+        return res.status(201).json({ name: 'Cheater', other: null });
     }
 
 }

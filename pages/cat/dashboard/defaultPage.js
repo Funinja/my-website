@@ -1,13 +1,15 @@
 import Container from '../../../components/UI/Container';
 import React, { useState } from 'react';
-import { Heading } from '@chakra-ui/react'
+import { Heading, Text } from '@chakra-ui/react'
 
 export default function FrontPage(props){
 
+    console.log("Other info", props.other);
 
     return (
         <Container>
-          <Heading> Hello {props.name}</Heading>
+          <Heading> Hello {props.name}!</Heading>
+          <Text fontSize='3xl'> Welcome to Cat Management!</Text>
         </Container>
     )
 }
@@ -15,7 +17,6 @@ export default function FrontPage(props){
 export async function getServerSideProps(ctx){
 
   const cookie = ctx.req.cookies.CatJWT;
-  console.log(cookie);
 
   const response = await fetch('http://localhost:3000/api/getInfo', {
     method: 'POST',
@@ -30,11 +31,10 @@ export async function getServerSideProps(ctx){
 
   const data = await response.json();
 
-  // console.log(response.status);
-
   return {
     props:{
       name: data.name,
+      other: data.other
     },
   }
 }
