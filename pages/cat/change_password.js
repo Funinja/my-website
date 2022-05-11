@@ -1,5 +1,5 @@
 import Container from '../../components/management/Container'
-import Form from '../../components/management/passwordForm'
+import Form from '../../components/management/changePasswordForm'
 
 export default function(){
     return (

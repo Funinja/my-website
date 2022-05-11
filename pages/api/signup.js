@@ -21,7 +21,6 @@ async function handler(req, res) {
         }
 
         try{
-            console.log('Here')
             const url = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${captcha}`;
             console.log(url);
             const response = await fetch(
@@ -130,6 +129,7 @@ async function handler(req, res) {
                 const status = await db.collection('users').insertOne({
                     id : hash,
                     registered: 0,
+                    changePassword: '',
                     email,
                     password, 
                 });
