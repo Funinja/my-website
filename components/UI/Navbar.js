@@ -75,6 +75,7 @@ const Navbar = () => {
             <Button
               as="a"
               variant="ghost"
+              mx={4}
               p={[1, 2, 2]}
               _hover={{ backgroundColor: navHoverBg[colorMode] }}
               aria-label="Pomodoro"
