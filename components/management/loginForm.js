@@ -20,6 +20,7 @@ export default function Form() {
     const [password, setPassword] = useState('');
     const recaptchaRef = React.useRef();
     const [error, setError] = useState('');
+    const [submit, setSubmit] = useState(0);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -61,6 +62,7 @@ export default function Form() {
             if(response.status < 200 || response.status > 299){
                 // console.log(data.message);
                 setError(data.message);
+                setSubmit(2);
                 console.log(error);
                 return;
             }
@@ -89,7 +91,7 @@ export default function Form() {
                     sitekey={PUBLIC_SITEKEY}
                     onChange={onReCAPTCHAChange}
                 />
-                <FormControl isRequired width="800px">
+                <FormControl isRequired isInvalid={submit === 2} width="800px">
                     <FormLabel> Email Address </FormLabel>
                     <Input 
                         placeholder="test@test.com"
@@ -99,7 +101,7 @@ export default function Form() {
                     />
                     <FormHelperText> Also Username </FormHelperText>
                 </FormControl>
-                <FormControl isRequired>
+                <FormControl isRequired isInvalid={submit === 2}>
                     <FormLabel htmlFor='password' my={2}> Password </FormLabel>
                     <Input 
                         id='password' 
@@ -109,6 +111,7 @@ export default function Form() {
                         onChange={event => setPassword(event.currentTarget.value)}
                     />
                     <FormHelperText> I am not liable for any stolen passwords </FormHelperText>
+                    {submit === 2 && <FormErrorMessage> Login Failed </FormErrorMessage>}
 
                 </FormControl>
                 <Flex flexDir="row">

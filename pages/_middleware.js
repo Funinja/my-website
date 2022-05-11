@@ -9,7 +9,7 @@ export function middleware(req, ev) {
 
     // console.log('My jwt', jwt);
 
-    if(url.includes("/cat/intro")){
+    if(url.includes("/cat/intro") || url.includes("/cat/login") || url.includes("/cat/signup") || url.includes("/cat/change_password")){
         if(jwt !== undefined){
             URL_path.pathname='/cat/dashboard/defaultPage';
             return NextResponse.rewrite(URL_path);

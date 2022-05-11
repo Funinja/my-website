@@ -23,6 +23,8 @@ export default function Register() {
 
     const [token, setToken] = useState('');
 
+    const [submit, setSubmit] = useState(0);
+
     const [password, setPassword] = useState('');
 
     const isError = error === '';
@@ -71,10 +73,16 @@ export default function Register() {
             console.log(response.status);
 
             if(response.status < 200 || response.status > 299){
-                // console.log(data.message);
+                console.log(data.message);
                 setError(data.message);
-                console.log(error);
+                if(submit !== 2){
+                    setSubmit(2);
+                }
                 return;
+            }
+
+            if(submit !== 1){
+                setSubmit(1);
             }
 
             console.log(data);
@@ -96,7 +104,7 @@ export default function Register() {
                     sitekey={PUBLIC_SITEKEY}
                     onChange={onReCAPTCHAChange}
                 />
-                <FormControl isRequired width="800px">
+                <FormControl isRequired width="800px" isInvalid={submit === 2}>
                     <FormLabel> Email Address </FormLabel>
                     <Input 
                         placeholder="test@test.com"
@@ -106,7 +114,9 @@ export default function Register() {
                     />
 
 
-                    <FormHelperText> You will get an email to make an account, check your spam folder </FormHelperText>
+                    {submit === 0 && <FormHelperText> You will get an email to make an account, check your spam folder </FormHelperText>}
+
+                    {submit === 2 && <FormHelperText> Email Send Failed: {error} </FormHelperText>}
 
 
                 </FormControl>
@@ -120,6 +130,8 @@ export default function Register() {
                     />
 
                     <FormHelperText> Make a password. I'm not liable for stolen passwords </FormHelperText>
+
+                    {submit === 1 && <FormHelperText> Email Sent </FormHelperText>}
 
                 </FormControl>
 

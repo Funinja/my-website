@@ -8,16 +8,16 @@ export default function Container({ children }) {
       <Stack
         as="main"
         spacing={8}
-        justifyContent="center"
-        alignItems="center"
+        justifyContent="flex-start"
+        alignItems="flex-start"
         m="0 auto 4rem auto"
         maxWidth="800px"
         px={4}
       >
         <Flex
           flexDirection="column"
-          justifyContent="center"
-          alignItems="center"
+          justifyContent="flex-start"
+          alignItems="flex-start"
           maxWidth="800px"
           w="100%"
         >
