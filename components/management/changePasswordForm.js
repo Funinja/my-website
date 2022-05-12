@@ -48,7 +48,6 @@ export default function Register() {
         }
 
         try{
-            console.log("awaiting signup api");
             const response = await fetch('/api/changePassword', {
                 method: 'POST',
                 headers: {
@@ -63,10 +62,7 @@ export default function Register() {
 
             const data = await response.json();
 
-            console.log(response.status);
-
             if(response.status < 200 || response.status > 299){
-                console.log(data.message);
                 setError(data.message);
                 if(submit !== 2){
                     setSubmit(2);
@@ -78,7 +74,6 @@ export default function Register() {
                 setSubmit(1);
             }
 
-            console.log(data);
         }catch(error){
             alert(error?.message || "Something went wrong")
         }finally{

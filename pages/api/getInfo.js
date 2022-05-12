@@ -8,8 +8,6 @@ export default async function handler(req, res) {
     const { cookie } = req.body;
     const jwt = cookie;
 
-    console.log("Getting Info", jwt);
-
     // console.log("Getting Info");
 
     try{
@@ -33,7 +31,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ name: decoded.email, other: null });
     }catch(error){
 
-        return res.status(201).json({ name: 'Cheater', other: null });
+        return res.status(422).json({ name: 'Cheater', other: null });
     }
 
 }

@@ -49,7 +49,6 @@ export default function Timer()  {
             if (time <= 0){
                 setTime(times[0]);
                 setPause(1);
-                console.log("Hit Zero");
                 clearInterval(id);
             }
         }, 1000);
