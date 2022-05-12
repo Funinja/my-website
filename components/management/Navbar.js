@@ -72,15 +72,18 @@ const Navbar = () => {
         </Box>
         <Flex flexDir="row">
 
-          <NextLink href="/cat/change_password" passHref>
-            <Button
-              as="a"
-              variant="ghost"
-              _hover={{ backgroundColor: navHoverBg[colorMode] }}
-            >
-              Change Password
-            </Button>
-            </NextLink>
+
+
+          <Button
+            as="a"
+            variant="ghost"
+            mx={8}
+            href="/cat/change_password"
+            _hover={{ backgroundColor: navHoverBg[colorMode] }}
+          >
+            Change Password
+          </Button>
+
         </Flex>
       </Flex>
     );

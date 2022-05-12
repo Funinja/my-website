@@ -55,7 +55,7 @@ async function handler(req, res){
                         email,
                     }, {
                         $set: {
-                            changePassword: hash,
+                            changedPassword: hash,
                         }
                     });
 

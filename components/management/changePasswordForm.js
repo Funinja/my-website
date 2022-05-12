@@ -41,9 +41,7 @@ export default function Register() {
         }
 
         setToken(captchaCode);
-
-        // alert(`Captcha working ${captchaCode}`);
-
+        
         if(!email || !email.includes('@')){
             alert('Invalid details');
             return;

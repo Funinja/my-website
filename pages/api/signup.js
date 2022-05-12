@@ -129,7 +129,7 @@ async function handler(req, res) {
                 const status = await db.collection('users').insertOne({
                     id : hash,
                     registered: 0,
-                    changePassword: '',
+                    changedPassword: '',
                     email,
                     password, 
                 });

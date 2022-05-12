@@ -30,6 +30,6 @@ export default async function activateUser(req, res){
     }
 
     client.close();
-    return res.status(401).json({message: 'Cannot Validate an User!'});
+    return res.status(401).json({message: 'Cannot Validate a User!'});
 
 }
