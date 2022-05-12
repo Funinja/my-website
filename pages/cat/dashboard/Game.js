@@ -12,7 +12,7 @@ class Game extends Component {
         const renderOptions = {
             type: Phaser.AUTO,
             width: 800,
-            height: 400,
+            height: 600,
             parent: 'render-game',
             backgroundColor: '#2c1a26',
             scene: {
@@ -27,11 +27,11 @@ class Game extends Component {
     };
 
     preload(){
-        this.load.image('bobber', '/billy.png');
+        this.load.image('bobber', '/star.png');
     }
 
     create() {
-        this.add.image(200, 100, 'bobber');
+        this.add.image(400, 300, 'bobber');
     }
 
     update() {
