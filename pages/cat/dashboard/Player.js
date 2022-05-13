@@ -14,6 +14,8 @@ export class Player{
     red = rgbToHex(255, 0, 0);
     white = rgbToHex(255, 255, 255);
     blue = rgbToHex(0, 204, 255);
+    blueBobber = rgbToHex(0, 102, 102);
+    background = rgbToHex(26, 32, 44);
     r = 255;
     g = 255;
     b = 255;
@@ -57,7 +59,7 @@ export class Player{
             }
         }
 
-        this.bobberX += (this.posX - this.bobberX)/15;
+        this.bobberX += (this.posX - this.bobberX)/50;
         this.rodX += (this.posX - this.rodX)/10;
 
         if (this.counter === 150){
@@ -75,9 +77,6 @@ export class Player{
     draw = (ctx) => {
 
 
-        const bobber = new Image();
-        bobber.src = '/bomb.png';
-
         ctx.beginPath();
         ctx.lineWidth = this.lineRadius;
         ctx.strokeStyle = rgbToHex(this.r, Math.floor(this.lineRadius * 255/this.originalRadius), Math.floor(this.lineRadius * 255/this.originalRadius));
@@ -85,8 +84,29 @@ export class Player{
         ctx.lineTo(this.bobberX + 15, this.bobberY + 15);
         ctx.stroke();
 
-        // ctx.drawImage(image, this.posX, this.posY, 30, 30);
-        ctx.drawImage(bobber, this.bobberX, this.bobberY, 30, 30);
+        ctx.beginPath(); //bobber upper half
+        ctx.strokeStyle = this.blueBobber;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.lineWidth = 10;
+        ctx.arc(this.bobberX + 15, this.bobberY + 15, 10, Math.PI, 2 * Math.PI);
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.beginPath(); //bobber drawing lower half
+        ctx.strokeStyle = this.blueBobber;
+        ctx.fillStyle = this.blueBobber;
+        ctx.lineWidth = 10;
+        ctx.arc(this.bobberX + 15, this.bobberY + 15, 10 , 0, Math.PI);
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.beginPath(); //water
+        ctx.strokeStyle = this.background;
+        ctx.fillStyle = this.background;
+        ctx.lineWidth = 1;
+        ctx.rect(this.bobberX, this.bobberY + 20, 30, 15);
+        ctx.stroke();
+        ctx.fill();
 
         ctx.beginPath();
         ctx.globalAlpha = 0.2;
