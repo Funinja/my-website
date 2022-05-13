@@ -5,7 +5,7 @@ function App(){
     let canvas;
     let ctx;
 
-    const player = new Player(400, 400);
+    const player = new Player(400, 150);
 
     useEffect(() => {
         canvas = document.getElementById("myCanvas");
