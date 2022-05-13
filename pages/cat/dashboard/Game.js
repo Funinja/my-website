@@ -1,48 +1,39 @@
-import React, { Component } from 'react';
-import Phaser from 'phaser';
+import React, { useEffect } from 'react';
+import { Player } from './Player';
 
-//1a202c
+function App(){
+    let canvas;
+    let ctx;
 
-class Game extends Component {
-    game = {};
-    bg = '';
-    cursors = {};
+    const player = new Player(400, 400);
 
-    componentDidMount(){
-        const renderOptions = {
-            type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            parent: 'render-game',
-            backgroundColor: '#2c1a26',
-            scene: {
-                preload: this.preload,
-                create: this.create,
-                update: this.update
-            }
-        };
+    useEffect(() => {
+        canvas = document.getElementById("myCanvas");
 
-        this.game = new Phaser.Game(renderOptions);
+        
 
-    };
+        setInterval(() =>{
 
-    preload(){
-        this.load.image('bobber', '/star.png');
-    }
+            ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, 800, 600);
 
-    create() {
-        this.add.image(400, 300, 'bobber');
-    }
+            player.update();
+            player.draw(ctx);
 
-    update() {
+        }, 1000/30);
 
-    }
+    }, [player]);
 
-    render() {
-        return (
-            <div id='render-game'/>
-        );
-    }
+    return(
+        <div
+            style={{display: 'flex', justifyContent:'center', alignItems:'center', height:'100%', flexDirection: 'row'
+        }}
+        >
+
+            <canvas id="myCanvas" width="800" height="600" style={{backgroundSize:"cover", border:'2px solid #ffffff', marginTop:'48px'}} />
+
+        </div>
+    );
 }
 
-export default Game;
+export default App;
