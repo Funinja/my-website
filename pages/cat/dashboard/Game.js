@@ -13,6 +13,7 @@ function App(props){
         setMaxFishDepth : 1000,
         depthRatio: 7/10,
         fishToShadowRatio: 1/50,
+        fishMaxIdleTime: 30
 
     }
 

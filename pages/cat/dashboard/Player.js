@@ -37,6 +37,8 @@ export class Player{
     fishSet = 0;
     fishXDir = 0;
     fishSpeed = 0;
+    fishMode = 0;
+    fishMaxIdleTime = 0;
 
     //rod parameters
     pull = 5;
@@ -55,7 +57,9 @@ export class Player{
         this.rodX = posX - 15;
         this.rodY = posY - 15; 
 
-        this.counter = 0;
+        this.counter = 0; //rod counter
+        this.idleCounter = 0;
+        this.waitDuration = 0;
     }
 
     update = (fishType) => {
@@ -78,6 +82,8 @@ export class Player{
                     this.fishDepth = fishType.setMaxFishDepth * fishType.depthRatio;
                     this.fishShadowSize = fishType.fishShadowSize;
                     this.setMaxFishDepth = fishType.setMaxFishDepth;
+                    this.fishMaxIdleTime = fishType.fishMaxIdleTime;
+                    this.fishToShadowRatio = fishType.fishToShadowRatio;
 
                     this.fishSpeed = fishType.fishSpeed;
                     this.fishXDir = Math.floor(Math.random() * 501 + 150);
@@ -97,13 +103,32 @@ export class Player{
                 this.pressed = 1;
             }
         }
+
         this.counter += 1;
         this.pressed = 0;
 
-        this.fishX += Math.floor((this.fishXDir - this.fishX) * this.fishSpeed);
         this.rodX += (this.posX - this.rodX)/10;
 
         if (this.catch === 1){
+            this.fishX +=  (this.fishXDir - this.fishX) * this.fishSpeed; //setting fish position
+            this.idleCounter += 1;
+
+            if(this.fishXDir - 10 < this.fishX && this.fishXDir + 10 > this.fishX){
+                this.idleCounter += 1;
+
+                if(this.waitDuration === 0){
+                    this.idleCounter = 0;
+                    this.waitDuration = Math.floor(Math.random() * (this.fishMaxIdleTime + 1)); //wait within one second
+
+                }else if(this.waitDuration <= this.idleCounter){
+                    this.fishXDir = Math.floor(Math.random() * 501 + 150);
+                    this.waitDuration = 0;
+                }
+                
+            }
+
+            // console.log(this.fishXDir, this.fishX);
+
             this.fishShadowSize = Math.floor(this.setMaxFishDepth - this.fishDepth);
             this.fishDepth += 1;
 
@@ -128,11 +153,11 @@ export class Player{
             // if(this.posX - 5 < this.bobberX && this.posX + 5 > this.bobberX) console.log("perfect");
         }
 
-        if (this.counter === 150){
+        if (this.counter === 150){ //keep track of every five seconds for 
             this.counter = 0;
         }
 
-        if(this.counter % 30 === 0 && this.counter !== 0 && this.lineRadius <= this.originalRadius - 1){
+        if(this.counter % 30 === 0 && this.counter !== 0 && this.lineRadius <= this.originalRadius - 1){ //regain line thickness
 
             this.lineRadius += 1;
 
