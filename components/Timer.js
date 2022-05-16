@@ -4,8 +4,9 @@ import { Flex, Heading, Button, Box, Center } from '@chakra-ui/react';
 export default function Timer()  {
     const options = ["Pomodoro", "Short Break", "Long Break"];
     const initialtimes = [3, 3, 3];
-    let times = [1, 2, 3];
+    let times = [1500, 300, 1800];
     const pattern = [0, 1, 0, 1, 0, 1, 2];
+    var counter = 0;
     const [currentStage, setCurrentStage] = useState(0);
     const [time, setTime] = useState(times[currentStage]);
     const [pause, setPause] = useState(1);
@@ -43,9 +44,19 @@ export default function Timer()  {
 
     useEffect(() => {
         const id = setInterval(()=>{
-            if(pause === 0){
+            counter += 1;
+            // console.log(counter);
+
+            if(pause === 1 && time <= 0 && counter % 30 !== 0){
+
+                setTime(times[pattern[currentStage]]);
+
+            }
+
+            if(pause === 0 && counter % 30 === 0){
                 console.log(pause, currentStage, time - 1);
                 setTime(time - 1);
+                counter = 0;
 
                 if (time <= 0){
                     setCurrentStage(currentStage + 1);
@@ -55,17 +66,11 @@ export default function Timer()  {
                 }
             }
 
-        }, 1000);
-
-        if (time <= 0){
-            setCurrentStage(currentStage + 1);
-            setTime(times[pattern[currentStage]]);
-            setPause(1);
-            clearInterval(id);
-        }
+        }, 1000/30);
 
         return () => clearInterval(id);
-    }, [currentStage, time, pause]);
+
+    }, [currentStage, time, pause, counter]);
 
     return (
         <div className="bg-white" text-align="center">
