@@ -1,9 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Player } from './Player';
 
-function App(){
+function App(props){
     let canvas;
     let ctx;
+    const fishType = {
+        name: 'trout',
+        fishShadowSize : 30,
+        fishX : 0,
+        fishY : 0,
+        fishSpeed : 1 / 50,
+        setMaxFishDepth : 1000,
+        depthRatio: 7/10,
+        fishToShadowRatio: 1/50,
+
+    }
+
+    const [fish, setFish] = useState(0);
+
+    const trout = {
+        minSize : 30,
+        maxSize : 50,
+        movement: [
+            
+        ]
+    }
 
     const player = new Player(400, 150);
 
@@ -17,7 +38,7 @@ function App(){
             ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, 800, 600);
 
-            player.update();
+            player.update(fishType);
             player.draw(ctx);
 
         }, 1000/30);
