@@ -4,6 +4,7 @@ import { Player } from './Player';
 function App(props){
     let canvas;
     let ctx;
+    let section = 0;
     const fishType = {
         name: 'trout',
         fishShadowSize : 30,
@@ -32,15 +33,18 @@ function App(props){
     useEffect(() => {
         canvas = document.getElementById("myCanvas");
 
-        
+        // console.log("real", props.p);
 
         setInterval(() =>{
+            // console.log(section);
 
             ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, 800, 600);
 
             player.update(fishType);
+
             player.draw(ctx);
+
 
         }, 1000/30);
 

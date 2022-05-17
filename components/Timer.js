@@ -3,9 +3,9 @@ import { Flex, Heading, Button, Box, Center } from '@chakra-ui/react';
 
 export default function Timer()  {
     const options = ["Pomodoro", "Short Break", "Long Break"];
-    const initialtimes = [3, 3, 3];
+    const initialtimes = [1500, 300, 1800];
     let times = [1500, 300, 1800];
-    const pattern = [0, 1, 0, 1, 0, 1, 2];
+    const pattern = [0, 1, 0, 1, 0, 1, 0, 1, 2];
     var counter = 0;
     const [currentStage, setCurrentStage] = useState(0);
     const [time, setTime] = useState(times[currentStage]);
@@ -45,7 +45,6 @@ export default function Timer()  {
     useEffect(() => {
         const id = setInterval(()=>{
             counter += 1;
-            // console.log(counter);
 
             if(pause === 1 && time <= 0 && counter % 30 !== 0){
 
@@ -54,12 +53,17 @@ export default function Timer()  {
             }
 
             if(pause === 0 && counter % 30 === 0){
-                console.log(pause, currentStage, time - 1);
                 setTime(time - 1);
                 counter = 0;
 
                 if (time <= 0){
-                    setCurrentStage(currentStage + 1);
+
+                    if (currentStage + 1 >= 9){
+                        setCurrentStage(0);
+                    }else{
+                        setCurrentStage(currentStage + 1);
+                    }
+
                     setTime(0);
                     setPause(1);
                     clearInterval(id);
@@ -92,7 +96,7 @@ export default function Timer()  {
                         {options.map((option, index)=>{
                             return <Button onClick={() => {
                                 // setTime(times[index]);
-                            }} variant='ghost' fontSize='lg' key={index}>{option}</Button>;
+                            }} variant={index === pattern[currentStage] ? 'solid' : 'ghost'} fontSize='lg' colorScheme='teal' key={index}>{option}</Button>;
                         })
 
                         }

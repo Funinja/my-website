@@ -39,6 +39,7 @@ export class Player{
     fishSpeed = 0;
     fishMode = 0;
     fishMaxIdleTime = 0;
+    fishingStage = 0;
 
     //rod parameters
     pull = 5;
@@ -97,6 +98,16 @@ export class Player{
                 if(this.catch === 1){
                     this.fishDepth = this.fishDepth - this.rodPower;
                 }
+            }
+
+            if(e.key === 'i'){
+                if(this.fishingStage === 1){
+                    this.fishingStage = 0;
+                }else{
+                    this.fishingStage = 1;
+                }
+
+                console.log(this.fishingStage);
             }
 
             if(e.key !== ' '){
@@ -167,92 +178,104 @@ export class Player{
 
     draw = (ctx) => {
 
-        if(this.reeled === 1){
+        if(this.fishingStage === 1){
 
-            if(this.catch === 1){
-                ctx.beginPath(); //bobber drawing lower half
+            if(this.reeled === 1){
+
+                if(this.catch === 1){
+                    ctx.beginPath(); //bobber drawing lower half
+                    ctx.strokeStyle = this.background;
+                    ctx.fillStyle = this.blueBobber;
+                    ctx.lineWidth = 1;
+                    // ctx.globalAlpha = 0.3;
+                    // ctx.arc(this.bobberX + 15, this.bobberY + 15, 50 , 0, Math.PI);
+                    ctx.ellipse(this.fishX, this.fishY, this.fishShadowSize * 2 * this.fishToShadowRatio, this.fishShadowSize * this.fishToShadowRatio, 0, Math.PI, 2 * Math.PI);
+                    ctx.stroke();
+
+
+                    var grd = ctx.createRadialGradient(this.fishX, this.fishY, 1, this.fishX, this.fishY, Math.floor(this.fishShadowSize * 5/6));
+                    grd.addColorStop(0, this.fishShadow);
+                    grd.addColorStop(1, this.background);
+                    ctx.fillStyle = grd;
+                    ctx.fill();
+                }
+
+                ctx.beginPath(); //fishing line
+                ctx.lineWidth = this.lineRadius;
+                ctx.strokeStyle = rgbToHex(this.r, Math.floor(this.lineRadius * 255/this.originalRadius), Math.floor(this.lineRadius * 255/this.originalRadius));
+                ctx.moveTo(this.rodX + 15, this.rodY + 15);
+                if(this.catch === 0){
+                    ctx.lineTo(this.bobberX + 15, this.bobberY + 15);
+                }else if(this.catch === 1){
+                    ctx.lineTo(this.fishX, this.fishY + 15);
+                }
+                ctx.stroke();
+
+                if (this.catch === 0){
+                    ctx.beginPath(); //bobber upper half
+                    ctx.strokeStyle = this.blueBobber;
+                    ctx.fillStyle = "#FFFFFF";
+                    ctx.lineWidth = 10;
+                    ctx.arc(this.bobberX + 15, this.bobberY + 15, 10, Math.PI, 2 * Math.PI);
+                    ctx.stroke();
+                    ctx.fill();
+
+                    ctx.beginPath(); //bobber drawing lower half
+                    ctx.strokeStyle = this.blueBobber;
+                    ctx.fillStyle = this.blueBobber;
+                    ctx.lineWidth = 10;
+                    ctx.arc(this.bobberX + 15, this.bobberY + 15, 10 , 0, Math.PI);
+                    ctx.stroke();
+                    ctx.fill();
+                }
+
+                ctx.beginPath(); //water
                 ctx.strokeStyle = this.background;
-                ctx.fillStyle = this.blueBobber;
+                ctx.fillStyle = this.background;
                 ctx.lineWidth = 1;
-                // ctx.globalAlpha = 0.3;
-                // ctx.arc(this.bobberX + 15, this.bobberY + 15, 50 , 0, Math.PI);
-                ctx.ellipse(this.fishX, this.fishY, this.fishShadowSize * 2 * this.fishToShadowRatio, this.fishShadowSize * this.fishToShadowRatio, 0, Math.PI, 2 * Math.PI);
-                ctx.stroke();
-
-
-                var grd = ctx.createRadialGradient(this.fishX, this.fishY, 1, this.fishX, this.fishY, Math.floor(this.fishShadowSize * 5/6));
-                grd.addColorStop(0, this.fishShadow);
-                grd.addColorStop(1, this.background);
-                ctx.fillStyle = grd;
-                ctx.fill();
-            }
-
-            ctx.beginPath(); //fishing line
-            ctx.lineWidth = this.lineRadius;
-            ctx.strokeStyle = rgbToHex(this.r, Math.floor(this.lineRadius * 255/this.originalRadius), Math.floor(this.lineRadius * 255/this.originalRadius));
-            ctx.moveTo(this.rodX + 15, this.rodY + 15);
-            if(this.catch === 0){
-                ctx.lineTo(this.bobberX + 15, this.bobberY + 15);
-            }else if(this.catch === 1){
-                ctx.lineTo(this.fishX, this.fishY + 15);
-            }
-            ctx.stroke();
-
-            if (this.catch === 0){
-                ctx.beginPath(); //bobber upper half
-                ctx.strokeStyle = this.blueBobber;
-                ctx.fillStyle = "#FFFFFF";
-                ctx.lineWidth = 10;
-                ctx.arc(this.bobberX + 15, this.bobberY + 15, 10, Math.PI, 2 * Math.PI);
+                if(this.catch === 0){
+                    ctx.rect(this.bobberX - 65, this.bobberY + 21, 160, 50);
+                }else if(this.catch === 1){
+                    ctx.rect(this.fishX - 50, this.bobberY + 21, 160, 50);
+                }
                 ctx.stroke();
                 ctx.fill();
 
-                ctx.beginPath(); //bobber drawing lower half
-                ctx.strokeStyle = this.blueBobber;
-                ctx.fillStyle = this.blueBobber;
-                ctx.lineWidth = 10;
-                ctx.arc(this.bobberX + 15, this.bobberY + 15, 10 , 0, Math.PI);
-                ctx.stroke();
-                ctx.fill();
-            }
+                if(this.catch === 1){
+                    ctx.beginPath(); //bobber drawing lower half
+                    ctx.strokeStyle = this.background;
+                    ctx.lineWidth = 1;
+                    // ctx.globalAlpha = 0.3;
+                    // ctx.arc(this.bobberX + 15, this.bobberY + 15, 50 , 0, Math.PI);
+                    ctx.ellipse(this.fishX, this.fishY, this.fishShadowSize * 2 * this.fishToShadowRatio, this.fishShadowSize * this.fishToShadowRatio, 0, 0, Math.PI);
+                    ctx.stroke();
 
-            ctx.beginPath(); //water
-            ctx.strokeStyle = this.background;
-            ctx.fillStyle = this.background;
-            ctx.lineWidth = 1;
-            if(this.catch === 0){
-                ctx.rect(this.bobberX - 65, this.bobberY + 21, 160, 50);
-            }else if(this.catch === 1){
-                ctx.rect(this.fishX - 50, this.bobberY + 21, 160, 50);
-            }
-            ctx.stroke();
-            ctx.fill();
+                    var grd = ctx.createRadialGradient(this.fishX, this.fishY, 1, this.fishX, this.fishY, this.fishShadowSize * 5/6);
+                    grd.addColorStop(0, this.fishShadow);
+                    grd.addColorStop(1, this.background);
+                    ctx.fillStyle = grd;
+                    ctx.fill();
+                }
 
-            if(this.catch === 1){
-                ctx.beginPath(); //bobber drawing lower half
-                ctx.strokeStyle = this.background;
-                ctx.lineWidth = 1;
-                // ctx.globalAlpha = 0.3;
-                // ctx.arc(this.bobberX + 15, this.bobberY + 15, 50 , 0, Math.PI);
-                ctx.ellipse(this.fishX, this.fishY, this.fishShadowSize * 2 * this.fishToShadowRatio, this.fishShadowSize * this.fishToShadowRatio, 0, 0, Math.PI);
+                ctx.beginPath(); //fishing rod
+                ctx.globalAlpha = 0.2;
+                ctx.lineWidth = 18;
+                ctx.strokeStyle = this.blue;
+                ctx.moveTo(400, 1000);
+                ctx.lineTo(this.rodX + 15, this.rodY + 15);
                 ctx.stroke();
 
-                var grd = ctx.createRadialGradient(this.fishX, this.fishY, 1, this.fishX, this.fishY, this.fishShadowSize * 5/6);
-                grd.addColorStop(0, this.fishShadow);
-                grd.addColorStop(1, this.background);
-                ctx.fillStyle = grd;
-                ctx.fill();
+                ctx.globalAlpha = 1;
             }
 
-            ctx.beginPath(); //fishing rod
-            ctx.globalAlpha = 0.2;
-            ctx.lineWidth = 18;
-            ctx.strokeStyle = this.blue;
-            ctx.moveTo(400, 1000);
-            ctx.lineTo(this.rodX + 15, this.rodY + 15);
-            ctx.stroke();
+        }else{
 
-            ctx.globalAlpha = 1;
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "#FFFFFF"
+            ctx.fillText("If you are on your small break you can get ", 20, 50);
+            ctx.fillText("virtual fish for your account!", 20, 90);
+            ctx.fillText("Press F to begin fishing", 420, 540);
+
         }
 
     }
