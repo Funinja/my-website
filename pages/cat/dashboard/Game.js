@@ -6,7 +6,10 @@ function App(props){
     let ctx;
     let section = 0;
     const fishType = {
-        name: 'trout',
+        name: 'rainbow trout',
+        image: '/rainbow_trout.png',
+        fishWidth : 150,
+        fishLength : 150,
         fishShadowSize : 30,
         fishX : 0,
         fishY : 0,
