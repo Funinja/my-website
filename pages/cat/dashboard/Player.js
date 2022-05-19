@@ -46,6 +46,7 @@ export class Player{
     fishLength = 0;
     fish = '';
     fishImage = '';
+    y = 135;
 
     //rod parameters
     pull = 5;
@@ -69,7 +70,7 @@ export class Player{
         this.waitDuration = 0;
     }
 
-    update = (fishType) => {
+    update = (fishesType) => {
 
         document.onkeydown = (e) => {
             console.log(e.key);
@@ -80,26 +81,28 @@ export class Player{
                 this.posX -= this.speed;
             }
             if(e.key === 'f'){
-                if (this.catch === 1){
-                    this.catch = 0;
-                }else{
-                    this.catch = 1;
-                    this.fish = fishType.name;
-                    this.fishImage = fishType.image;
-                    this.fishX = this.bobberX + 15;
-                    this.fishY = this.bobberY + 20;
-                    this.fishDepth = fishType.setMaxFishDepth * fishType.depthRatio;
-                    this.fishShadowSize = fishType.fishShadowSize;
-                    this.setMaxFishDepth = fishType.setMaxFishDepth;
-                    this.fishMaxIdleTime = fishType.fishMaxIdleTime;
-                    this.fishToShadowRatio = fishType.fishToShadowRatio;
-                    this.fishWidth = fishType.fishWidth;
-                    this.fishLength = fishType.fishLength;
+                // if (this.catch === 1){
+                //     this.catch = 0;
+                // }else{
+                //     const fishType = fishesType[0];
 
-                    this.fishSpeed = fishType.fishSpeed;
-                    this.fishXDir = Math.floor(Math.random() * 501 + 150);
+                //     this.catch = 1;
+                //     this.fish = fishType.name;
+                //     this.fishImage = fishType.image;
+                //     this.fishX = this.bobberX + 15;
+                //     this.fishY = this.bobberY + 20;
+                //     this.fishDepth = fishType.setMaxFishDepth * fishType.depthRatio;
+                //     this.fishShadowSize = fishType.fishShadowSize;
+                //     this.setMaxFishDepth = fishType.setMaxFishDepth;
+                //     this.fishMaxIdleTime = fishType.fishMaxIdleTime;
+                //     this.fishToShadowRatio = fishType.fishToShadowRatio;
+                //     this.fishWidth = fishType.fishWidth;
+                //     this.fishLength = fishType.fishLength;
 
-                }
+                //     this.fishSpeed = fishType.fishSpeed;
+                //     this.fishXDir = Math.floor(Math.random() * 501 + 150);
+
+                // }
             }
             if(e.key === ' ' && this.lineRadius - 1 !== 0){
                 this.lineRadius -= this.rodDuration;
@@ -120,7 +123,7 @@ export class Player{
 
                 }
 
-                console.log(this.fishingStage);
+                // console.log(this.fishingStage);
             }
 
             if(e.key !== ' '){
@@ -130,6 +133,30 @@ export class Player{
 
         if(this.fishingStage === 1){
             if(this.waitTime >= this.waitDuration && this.catch !== 1){
+                console.log('number of things', fishesType.length);
+                let totalFish = 0;
+                let fishIndex = 0;
+
+                for(let i = 0; i < fishesType.length; i++){
+                    totalFish += fishesType[i].amount;
+                }
+
+                const pickFish = Math.floor(Math.random() * totalFish + 1);
+
+                console.log(pickFish, totalFish);
+
+                totalFish = 0;
+
+                for(let i = 0; i <= fishesType.length; i++){
+                    totalFish += fishesType[i].amount;
+                    if(totalFish >= pickFish){
+                        fishIndex = i;
+                        break;
+                    }
+                }
+
+                const fishType = fishesType[fishIndex];
+
                 this.catch = 1;
                 this.fish = fishType.name;
                 this.fishImage = fishType.image;
@@ -149,6 +176,17 @@ export class Player{
             }else{
                 this.waitTime += 1;
             }
+
+            let x = Math.abs(this.rodX - this.fishX);
+            let y = this.y;
+
+            let ratio = Math.sqrt(x * x + y * y) / y;
+
+            // console.log(x, y);
+
+            this.rodDuration = 1/3 * ratio;
+
+            // console.log(ratio);
         
             this.counter += 1;
             this.pressed = 0;
@@ -188,11 +226,11 @@ export class Player{
                 this.catch = 0;
                 this.succeed = 1;
                 this.fishingStage = 2;
-                console.log(this.succeed);
+                // console.log(this.succeed);
             }else if(this.lineRadius <= 1) { //rod line breaks
                 this.catch = 0;
                 this.succeed = -1;
-                console.log(this.succeed);
+                // console.log(this.succeed);
                 this.fishingStage = 3;
             }
         }
@@ -311,7 +349,7 @@ export class Player{
             ctx.font = "30px Arial";
             ctx.fillStyle = "#FFFFFF"
             ctx.fillText("You caught a: ", 20, 50);
-            console.log(this.fish.length/2);
+            // console.log(this.fish.length/2);
             ctx.fillText(this.fish, 400 - this.fish.length/2 * 15, 180);
 
             const image = new Image();

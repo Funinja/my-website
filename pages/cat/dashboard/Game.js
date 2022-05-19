@@ -5,6 +5,40 @@ function App(props){
     let canvas;
     let ctx;
     let section = 0;
+
+    const fishes = [
+        {
+            name: 'rainbow trout',
+            image: '/rainbow_trout.png',
+            fishWidth : 150,
+            fishLength : 150,
+            fishShadowSize : 30,
+            fishX : 0,
+            fishY : 0,
+            fishSpeed : 1 / 50,
+            setMaxFishDepth : 1000,
+            depthRatio: 7/10,
+            fishToShadowRatio: 1/50,
+            fishMaxIdleTime: 30,
+            amount: 2
+        },
+        {
+            name: 'albacore',
+            image: '/albacore.png',
+            fishWidth : 150,
+            fishLength : 150,
+            fishShadowSize : 30,
+            fishX : 0,
+            fishY : 0,
+            fishSpeed : 1 / 50,
+            setMaxFishDepth : 1000,
+            depthRatio: 7/10,
+            fishToShadowRatio: 1/50,
+            fishMaxIdleTime: 30,
+            amount: 1
+        }
+    ]
+
     const fishType = {
         name: 'rainbow trout',
         image: '/rainbow_trout.png',
@@ -19,6 +53,21 @@ function App(props){
         fishToShadowRatio: 1/50,
         fishMaxIdleTime: 30
 
+    }
+
+    const otherFish = {
+        name: 'albacore',
+        image: '/albacore.png',
+        fishWidth : 150,
+        fishLength : 150,
+        fishShadowSize : 30,
+        fishX : 0,
+        fishY : 0,
+        fishSpeed : 1 / 50,
+        setMaxFishDepth : 1000,
+        depthRatio: 7/10,
+        fishToShadowRatio: 1/50,
+        fishMaxIdleTime: 30
     }
 
     const [fish, setFish] = useState(0);
@@ -44,7 +93,7 @@ function App(props){
             ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, 800, 600);
 
-            player.update(fishType);
+            player.update(fishes);
 
             player.draw(ctx);
 
