@@ -46,6 +46,7 @@ export class Player{
     fishLength = 0;
     fish = '';
     fishImage = '';
+    fishSink = 1;
     y = 135;
 
     //rod parameters
@@ -53,6 +54,7 @@ export class Player{
     rodPower = 50;
     succeed = 0;
     rodDuration = 1/4;
+    rodSpeed = 10;
 
     constructor(posX, posY){
 
@@ -80,30 +82,6 @@ export class Player{
             if(e.key === 'a' && this.posX > 150){
                 this.posX -= this.speed;
             }
-            if(e.key === 'f'){
-                // if (this.catch === 1){
-                //     this.catch = 0;
-                // }else{
-                //     const fishType = fishesType[0];
-
-                //     this.catch = 1;
-                //     this.fish = fishType.name;
-                //     this.fishImage = fishType.image;
-                //     this.fishX = this.bobberX + 15;
-                //     this.fishY = this.bobberY + 20;
-                //     this.fishDepth = fishType.setMaxFishDepth * fishType.depthRatio;
-                //     this.fishShadowSize = fishType.fishShadowSize;
-                //     this.setMaxFishDepth = fishType.setMaxFishDepth;
-                //     this.fishMaxIdleTime = fishType.fishMaxIdleTime;
-                //     this.fishToShadowRatio = fishType.fishToShadowRatio;
-                //     this.fishWidth = fishType.fishWidth;
-                //     this.fishLength = fishType.fishLength;
-
-                //     this.fishSpeed = fishType.fishSpeed;
-                //     this.fishXDir = Math.floor(Math.random() * 501 + 150);
-
-                // }
-            }
             if(e.key === ' ' && this.lineRadius - 1 !== 0){
                 this.lineRadius -= this.rodDuration;
                 this.counter = 0;
@@ -113,7 +91,7 @@ export class Player{
                 }
             }
 
-            if(e.key === 'i'){
+            if(e.key === 'f'){
                 if(this.fishingStage === 1){
                     this.fishingStage = 0;
                 }else{
@@ -145,20 +123,27 @@ export class Player{
 
                 console.log(pickFish, totalFish);
 
+                let prob = totalFish;
+
+                console.log(prob);
+
                 totalFish = 0;
 
                 for(let i = 0; i <= fishesType.length; i++){
                     totalFish += fishesType[i].amount;
                     if(totalFish >= pickFish){
                         fishIndex = i;
+                        prob = Math.floor(fishesType[i].amount/prob * 100000);
                         break;
                     }
                 }
 
                 const fishType = fishesType[fishIndex];
 
+                prob = prob/1000;
+
                 this.catch = 1;
-                this.fish = fishType.name;
+                this.fish = fishType.name + " (rarity: " + prob + "%)";
                 this.fishImage = fishType.image;
                 this.fishX = this.bobberX + 15;
                 this.fishY = this.bobberY + 20;
@@ -169,6 +154,7 @@ export class Player{
                 this.fishToShadowRatio = fishType.fishToShadowRatio;
                 this.fishWidth = fishType.fishWidth;
                 this.fishLength = fishType.fishLength;
+                this.fishSink = fishType.fishSink;
 
                 this.fishSpeed = fishType.fishSpeed;
                 this.fishXDir = Math.floor(Math.random() * 501 + 150);
@@ -184,7 +170,7 @@ export class Player{
 
             // console.log(x, y);
 
-            this.rodDuration = 1/3 * ratio;
+            this.rodDuration = 1/4 * ratio;
 
             // console.log(ratio);
         
@@ -192,7 +178,7 @@ export class Player{
             this.pressed = 0;
         }
 
-        this.rodX += (this.posX - this.rodX)/10;
+        this.rodX += (this.posX - this.rodX)/this.rodSpeed;
 
         if (this.catch === 1){
             this.fishX +=  (this.fishXDir - this.fishX) * this.fishSpeed; //setting fish position
@@ -215,13 +201,13 @@ export class Player{
             // console.log(this.fishXDir, this.fishX);
 
             this.fishShadowSize = Math.floor(this.setMaxFishDepth - this.fishDepth);
-            this.fishDepth += 1;
+            this.fishDepth += this.fishSink;
 
 
             if(this.setMaxFishDepth - this.fishDepth <= 0){ //fish breaks rod
                 this.catch = 0;
                 this.succeed = -1;
-                this.fishingStage = 3;
+                this.fishingStage = 4;
             }else if(this.fishDepth <= 0) { //fish gets out of the water
                 this.catch = 0;
                 this.succeed = 1;
@@ -356,14 +342,20 @@ export class Player{
 
             image.src = this.fishImage;
 
-            ctx.drawImage(image, 400 - this.fishWidth/2, 210, 150, 150);
+            ctx.drawImage(image, 400 - this.fishWidth/2, 210, this.fishWidth, this.fishLength);
 
             ctx.fillText("Press F to begin fishing again", 360, 540);
 
         }else if(this.fishingStage === 3){
             ctx.font = "30px Arial";
             ctx.fillStyle = "#FFFFFF"
-            ctx.fillText("You failed! ", 20, 50);
+            ctx.fillText("You failed! Your line broke... ", 20, 50);
+            ctx.fillText("Press F to begin fishing again", 360, 540);
+
+        }else if(this.fishingStage === 4){
+            ctx.font = "30px Arial";
+            ctx.fillStyle = "#FFFFFF"
+            ctx.fillText("You failed! The fish got away ... ", 20, 50);
             ctx.fillText("Press F to begin fishing again", 360, 540);
 
         }else{
