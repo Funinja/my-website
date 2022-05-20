@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 
-export default function pChanged() {
+export default function PChanged() {
 
     const router = useRouter();
 

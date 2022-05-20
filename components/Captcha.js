@@ -5,7 +5,7 @@ import styles from "../styles/Home.module.css";
 
 const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITEKEY;
 
-export default function reCaptcha(){
+export default function ReCaptcha(){
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
