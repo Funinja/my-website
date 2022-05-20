@@ -1,3 +1,5 @@
+import React from 'react';
+
 function componentToHex(c){
     var hex = c.toString(16);
     return hex.length == 1 ? "0" + hex : hex;
@@ -7,7 +9,7 @@ function rgbToHex(r, g, b) {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
-export class Player{
+export class Player extends React.Component{
     score = 0;
     speed = 125;
     acceleration = 10;
@@ -58,6 +60,7 @@ export class Player{
 
     constructor(posX, posY){
 
+        super();
         this.posX = posX - 15;
         this.posY = posY - 15;
 
